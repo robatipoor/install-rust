@@ -1,0 +1,1 @@
+curl -LSs https://git.io/fjUal | bash

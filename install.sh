@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # ************ install rust programming language **************
 curl https://sh.rustup.rs -sSf | sh
