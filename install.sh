@@ -77,10 +77,11 @@ if [ "$1" == "all" ];then
     cargo install note-rs
 fi
 # ********************** set alias update rust command *******************
-echo 'add uprust alias for simple command for update rust'
 if [ -f "$HOME/.bashrc" ]; then
     echo 'alias uprust="rustup update && cargo install-update -a"' >> "$HOME/.bashrc"
 fi
 if [ -f "$HOME/.zshrc" ]; then
     echo 'alias uprust="rustup update && cargo install-update -a"' >> "$HOME/.zshrc"
 fi
+echo 'for update rust and other tools run command $ uprust'
+echo 'Install Finish !'
