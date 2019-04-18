@@ -12,7 +12,7 @@ rustup component add rust-analysis
 rustup component add llvm-tools-preview
 # *********** install vscode extension rust language **********
 if [ -x "$(command -v code)" ]; then
-    echo 'install rust vscode extension'
+    echo 'install vscode extension rust language'
     code --install-extension rust-lang.rust
     code --install-extension polypus74.trusty-rusty-snippets
     code --install-extension serayuzgur.crates
@@ -53,7 +53,7 @@ if [ -f "$HOME/.zshrc" ]; then
     echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> "$HOME/.zshrc"
 fi
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-# ****************************** other tools ***************************
+# ******************* useful rust command line tools *********************
 if [ "$1" == "all" ];then
     echo 'install useful rust command line tools'
     cargo install bat # or fcat
