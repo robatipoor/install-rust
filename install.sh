@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -o nounset    # error when referencing undefined variable
+set -o errexit    # exit when command fails
+
 # ************ install rust programming language **************
 curl https://sh.rustup.rs -sSf | sh
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -17,6 +20,44 @@ if [ -x "$(command -v code)" ]; then
     code --install-extension polypus74.trusty-rusty-snippets
     code --install-extension serayuzgur.crates
 fi
+# *********** install neovim plugins rust language **********
+echo 'install vim/neovim plugins rust language'
+# Install latest nodejs
+if [ ! -x "$(command -v node)" ]; then
+    echo 'install nodejs'
+    curl --fail -L https://install-node.now.sh/latest | sh
+    export PATH="/usr/local/bin/:$PATH"
+fi
+
+# Install yarn
+if [ ! -x "$(command -v yarn)" ]; then
+    echo 'install yarn'
+    curl --fail -o- -L https://yarnpkg.com/install.sh | sh
+    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+fi
+
+# Use package feature to install coc.nvim
+# If you want to use plugin manager, change DIR to plugin directory used by that manager.
+DIR_NEOVIM=~/.local/share/nvim/site/pack/coc/start
+# For vim user, the directory is different
+DIR_VIM=~/.vim/pack/coc/start
+mkdir -p $DIR_NEOVIM
+mkdir -p $DIR_VIM
+git clone https://github.com/neoclide/coc.nvim.git --depth=1
+for DEST in $DIR_NEOVIM $DIR_VIM ; do
+    cp -r coc.nvim $DEST
+done
+rm -rf coc.nvim
+for DEST in $DIR_NEOVIM $DIR_VIM ; do
+    cd $DEST/coc.nvim && ./install.sh nightly
+done
+# Install extensions
+mkdir -p ~/.config/coc/extensions
+cd ~/.config/coc/extensions
+if [ ! -f package.json ];then
+    echo '{"dependencies":{}}'> package.json
+fi
+yarn add coc-rls coc-json coc-snippets coc-highlight
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
 cargo install cargo-fix
