@@ -36,7 +36,7 @@ if [ ! -x "$(command -v yarn)" ]; then
     export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 # Use package feature to install coc.nvim
-echo "install coc.nvim"
+echo 'install coc.nvim'
 git clone https://github.com/neoclide/coc.nvim.git --depth=1
 DIR_NEOVIM=~/.local/share/nvim/site/pack/coc/start
 # For vim user, the directory is different
@@ -53,6 +53,7 @@ do
     cd $DIR/coc.nvim && ./install.sh nightly
 done
 # Install extensions
+echo 'install coc.nvim extensions'
 mkdir -p ~/.config/coc/extensions
 cd ~/.config/coc/extensions
 if [ ! -f package.json ];then
@@ -61,6 +62,7 @@ fi
 yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
+set +o errexit # not exit when command fails
 cargo install cargo-fix
 cargo install cargo-bloat
 cargo install cargo-asm
@@ -76,7 +78,7 @@ cargo install cargo-make
 cargo install rusty-tags
 # **************** install rust nightly version *****************
 rustup toolchain install nightly
-# set default rust compiler to nightly version
+# set default rust toolchain to nightly version
 rustup default nightly
 # ************** install nightly rust component *****************
 rustup component add rustfmt
@@ -126,4 +128,4 @@ if [ -f "$HOME/.zshrc" ]; then
     echo 'alias uprust="rustup update && cargo install-update -a"' >> "$HOME/.zshrc"
 fi
 echo 'for update rust and other tools run command $ uprust'
-echo 'Install Finish !'
+echo 'Install Finish Enjoy ;)'
