@@ -62,7 +62,7 @@ fi
 yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
 # disable an script option
 set +o errexit
-set +o nounset 
+set +o nounset
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
 cargo install cargo-fix
