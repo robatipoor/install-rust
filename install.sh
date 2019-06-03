@@ -25,31 +25,32 @@ echo 'install vim/neovim plugins rust language'
 # Install latest nodejs
 if [ ! -x "$(command -v node)" ]; then
     echo 'install nodejs'
-    curl --fail -L https://install-node.now.sh/latest | sh
+    curl --fail -LSs https://install-node.now.sh/latest | sh
     export PATH="/usr/local/bin/:$PATH"
 fi
 
 # Install yarn
 if [ ! -x "$(command -v yarn)" ]; then
     echo 'install yarn'
-    curl --fail -o- -L https://yarnpkg.com/install.sh | sh
+    curl --fail -o- -LSs https://yarnpkg.com/install.sh | sh
     export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
-
 # Use package feature to install coc.nvim
-# If you want to use plugin manager, change DIR to plugin directory used by that manager.
+echo "install coc.nvim"
+git clone https://github.com/neoclide/coc.nvim.git --depth=1
 DIR_NEOVIM=~/.local/share/nvim/site/pack/coc/start
 # For vim user, the directory is different
 DIR_VIM=~/.vim/pack/coc/start
-mkdir -p $DIR_NEOVIM
-mkdir -p $DIR_VIM
-git clone https://github.com/neoclide/coc.nvim.git --depth=1
-for DEST in $DIR_NEOVIM $DIR_VIM ; do
-    cp -r coc.nvim $DEST
+DIRS=( $DIR_NEOVIM $DIR_VIM)
+for DIR in "${DIRS[@]}"
+do
+    mkdir -p $DIR
+    cp -rf coc.nvim $DIR
 done
 rm -rf coc.nvim
-for DEST in $DIR_NEOVIM $DIR_VIM ; do
-    cd $DEST/coc.nvim && ./install.sh nightly
+for DIR in "${DIRS[@]}"
+do
+    cd $DIR/coc.nvim && ./install.sh nightly
 done
 # Install extensions
 mkdir -p ~/.config/coc/extensions
@@ -57,7 +58,7 @@ cd ~/.config/coc/extensions
 if [ ! -f package.json ];then
     echo '{"dependencies":{}}'> package.json
 fi
-yarn add coc-rls coc-json coc-snippets coc-highlight
+yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
 cargo install cargo-fix
