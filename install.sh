@@ -60,9 +60,11 @@ if [ ! -f package.json ];then
     echo '{"dependencies":{}}'> package.json
 fi
 yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
+# disable an script option
+set +o errexit
+set +o nounset 
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
-set +o errexit # not exit when command fails
 cargo install cargo-fix
 cargo install cargo-bloat
 cargo install cargo-asm
