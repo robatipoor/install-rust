@@ -150,6 +150,7 @@ if [ "$1" == "all" ];then
     cargo install peep
     cargo install pf
     cargo install note-rs
+    cargo install gitpub
 fi
 # ********************** set alias update rust command *******************
 if [ -f "$HOME/.bashrc" ]; then
