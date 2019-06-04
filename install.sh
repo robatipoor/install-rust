@@ -41,7 +41,7 @@ git clone https://github.com/neoclide/coc.nvim.git --depth=1
 DIR_NEOVIM=~/.local/share/nvim/site/pack/coc/start
 # For vim user, the directory is different
 DIR_VIM=~/.vim/pack/coc/start
-DIRS=( $DIR_NEOVIM $DIR_VIM)
+DIRS=($DIR_NEOVIM $DIR_VIM)
 for DIR in "${DIRS[@]}"
 do
     mkdir -p $DIR
@@ -60,6 +60,35 @@ if [ ! -f package.json ];then
     echo '{"dependencies":{}}'> package.json
 fi
 yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
+
+# install rust.vim
+echo 'install rust.vim'
+git clone https://github.com/rust-lang/rust.vim
+DIR_NEOVIM=~/.local/share/nvim/site/pack/rust.vim/start/
+# For vim user
+DIR_VIM=~/.vim/pack/rust.vim/start/
+DIRS=($DIR_NEOVIM $DIR_VIM)
+for DIR in "${DIRS[@]}"
+do
+    mkdir -p $DIR
+    cp -rf rust.vim $DIR
+done
+rm -rf rust.vim
+
+# install webapi-vim
+echo 'install webapi-vim'
+git clone https://github.com/mattn/webapi-vim
+DIR_NEOVIM=~/.local/share/nvim/site/pack/webapi-vim/start/
+# For vim user
+DIR_VIM=~/.vim/pack/webapi-vim/start/
+DIRS=($DIR_NEOVIM $DIR_VIM)
+for DIR in "${DIRS[@]}"
+do
+    mkdir -p $DIR
+    cp -rf webapi-vim $DIR
+done
+rm -rf webapi-vim
+
 # disable an script option
 set +o errexit
 set +o nounset
