@@ -9,10 +9,14 @@ Although they will be automatically install
 ### for install rust and all tools run this command it
 ```sh
 curl -LSs https://git.io/install-rust-language | bash -s all
+# or 
+curl -LSs https://kutt.it/install-rust-language | bash -s all
 ```
 ### or install rust without tools  
 ```sh
 curl -LSs https://git.io/install-rust-language | bash
+# or 
+curl -LSs https://kutt.it/install-rust-language | bash
 ```
 ### Attention
 The install process is time-consuming
