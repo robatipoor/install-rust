@@ -120,14 +120,30 @@ rustup component add rust-analysis
 rustup component add llvm-tools-preview
 # ************* install racer for code completion rust **********
 cargo install racer
-# set environment variable RUST_SRC_PATH
-if [ -f "$HOME/.bashrc" ]; then
-    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> "$HOME/.bashrc"
+# ************************* set RUST_SRC_PATH ******************************
+fish_config="$HOME/.config/fish/config.fish"
+bash_config="$HOME/.bashrc"
+zsh_config="$HOME/.zshrc"
+if [ -f $bash_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $bash_config ; then
+    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> $bash_config
 fi
-if [ -f "$HOME/.zshrc" ]; then
-    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> "$HOME/.zshrc"
+if [ -f $zsh_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $zsh_config ; then
+    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> $zsh_config
+fi
+if [ -f $fish_config ] && ! grep -Fxq "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" $fish_config ; then
+    echo "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" >> $fish_config
 fi
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+# *********************** set alias uprust for update **********************
+if [ -f $bash_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $bash_config ; then
+    echo 'alias uprust="rustup update && cargo install-update -a"' >> $bash_config
+fi
+if [ -f $zsh_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $zsh_config; then
+    echo 'alias uprust="rustup update && cargo install-update -a"' >> $zsh_config
+fi
+if [ -f $fish_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $fish_config; then
+    echo 'alias uprust="rustup update && cargo install-update -a"' >> $fish_config
+fi
 # ******************* useful rust command line tools *********************
 if [ "$1" == "all" ];then
     echo 'install useful rust command line tools'
@@ -153,11 +169,6 @@ if [ "$1" == "all" ];then
     cargo install gitpub
 fi
 # ********************** set alias update rust command *******************
-if [ -f "$HOME/.bashrc" ]; then
-    echo 'alias uprust="rustup update && cargo install-update -a"' >> "$HOME/.bashrc"
-fi
-if [ -f "$HOME/.zshrc" ]; then
-    echo 'alias uprust="rustup update && cargo install-update -a"' >> "$HOME/.zshrc"
-fi
 echo 'for update rust and other tools run command $ uprust'
+echo 'please restart termial'
 echo 'Install Finish Enjoy ;)'
