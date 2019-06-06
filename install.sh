@@ -22,6 +22,8 @@ if [ -x "$(command -v code)" ]; then
     code --install-extension polypus74.trusty-rusty-snippets
     # extension for Helps Rust developers managing dependencies with Cargo.toml
     code --install-extension serayuzgur.crates
+    # extension for syntax highlighting 
+    code --install-extension dunstontc.vscode-rust-syntax
 fi
 # *********** install neovim plugins rust language **********
 echo 'install vim/neovim plugins rust language'
