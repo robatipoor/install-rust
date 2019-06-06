@@ -16,8 +16,11 @@ rustup component add llvm-tools-preview
 # *********** install vscode extension rust language **********
 if [ -x "$(command -v code)" ]; then
     echo 'install vscode extension rust language'
+    # extension for code completion, Intellisense, refactoring, reformatting, errors, snippets
     code --install-extension rust-lang.rust
+    # extension for set of snippets for the Rust programming language 
     code --install-extension polypus74.trusty-rusty-snippets
+    # extension for Helps Rust developers managing dependencies with Cargo.toml
     code --install-extension serayuzgur.crates
 fi
 # *********** install neovim plugins rust language **********
@@ -59,7 +62,16 @@ cd ~/.config/coc/extensions
 if [ ! -f package.json ];then
     echo '{"dependencies":{}}'> package.json
 fi
-yarn add coc-rls coc-json coc-snippets coc-highlight coc-yaml
+# Rust language server extension 
+yarn add coc-rls
+# Json language server extension
+yarn add coc-json
+# snippets solution for coc.nvim
+yarn add coc-snippets
+# provide default highlight for coc.nvim
+yarn add coc-highlight
+# YAML support for vim/neovim
+yarn add coc-yaml
 
 # install rust.vim
 echo 'install rust.vim'
@@ -75,7 +87,7 @@ do
 done
 rm -rf rust.vim
 
-# install webapi-vim
+# install webapi-vim need web api interface for RustPlay command vim/neovim
 echo 'install webapi-vim'
 git clone https://github.com/mattn/webapi-vim
 DIR_NEOVIM=~/.local/share/nvim/site/pack/webapi-vim/start/
@@ -168,7 +180,7 @@ if [ "$1" == "all" ];then
     cargo install note-rs
     cargo install gitpub
 fi
-# ********************** set alias update rust command *******************
-echo 'for update rust and other tools run command $ uprust'
-echo 'please restart termial'
-echo 'Install Finish Enjoy ;)'
+# ************************** finish install ******************************
+echo 'for update rust and other tools '
+echo 'run command $ uprust after restart terminal'
+echo 'install finish enjoy ;)'
