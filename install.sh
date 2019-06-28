@@ -4,7 +4,7 @@ set -o nounset    # error when referencing undefined variable
 set -o errexit    # exit when command fails
 
 # ************ install rust programming language **************
-curl https://sh.rustup.rs -sSf | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 export PATH="$HOME/.cargo/bin:$PATH"
 # ************** install stable rust component ****************
 rustup component add rustfmt
@@ -33,7 +33,6 @@ if [ ! -x "$(command -v node)" ]; then
     curl --fail -LSs https://install-node.now.sh/latest | sh
     export PATH="/usr/local/bin/:$PATH"
 fi
-
 # Install yarn
 if [ ! -x "$(command -v yarn)" ]; then
     echo 'install yarn'
@@ -103,7 +102,7 @@ do
 done
 rm -rf webapi-vim
 
-# disable an script option
+# disable script option
 set +o errexit
 set +o nounset
 # ****************** install cargo subcommands ******************
@@ -181,6 +180,7 @@ if [ "$1" == "all" ];then
     cargo install pf
     cargo install note-rs
     cargo install gitpub
+    cargo install cbs
 fi
 # ************************** finish install ******************************
 echo 'for update rust and other tools '
