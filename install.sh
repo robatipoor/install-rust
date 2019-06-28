@@ -105,6 +105,7 @@ rm -rf webapi-vim
 # disable script option
 set +o errexit
 set +o nounset
+
 # ****************** install cargo subcommands ******************
 echo 'install cargo subcommands'
 cargo install cargo-fix
@@ -131,7 +132,7 @@ rustup component add rls
 rustup component add rust-src
 rustup component add rust-analysis
 rustup component add llvm-tools-preview
-# ************* install racer for code completion rust **********
+# ************* install racer for rust code completion **********
 cargo install racer
 # ************************* set RUST_SRC_PATH ******************************
 fish_config="$HOME/.config/fish/config.fish"
@@ -183,6 +184,15 @@ if [ "$1" == "all" ];then
     cargo install cbs
 fi
 # ************************** finish install ******************************
-echo 'for update rust and other tools '
-echo 'run command $ uprust after restart terminal'
-echo 'install finish enjoy ;)'
+echo '
+-----------------------------------------------
+|       for update rust and other tools       |
+| run command $ uprust after restart terminal |
+|           install finish enjoy ;)           |
+-----------------------------------------------
+              \
+               \
+                 _~^~^~_
+             \) /  o o  \ (/
+               "_   -   _"
+              // "-----" \\'
