@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 
-set -o nounset    # error when referencing undefined variable
-set -o errexit    # exit when command fails
+set -o nounset # error when referencing undefined variable
+set -o errexit # exit when command fails
+
+# Check command is installed
+if [ ! -x "$(command -v curl)" ]; then
+    echo 'please install curl'
+    exit
+fi
+if [ ! -x "$(command -v tar)" ]; then
+    echo 'please install tar'
+    exit
+fi
+if [ ! -x "$(command -v git)" ]; then
+    echo 'please install git'
+    exit
+fi
 
 # ************ install rust programming language **************
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -18,11 +32,11 @@ if [ -x "$(command -v code)" ]; then
     echo 'install vscode extension rust language'
     # extension for code completion, Intellisense, refactoring, reformatting, errors, snippets
     code --install-extension rust-lang.rust
-    # extension for set of snippets for the Rust programming language 
+    # extension for set of snippets for the Rust programming language
     code --install-extension polypus74.trusty-rusty-snippets
     # extension for Helps Rust developers managing dependencies with Cargo.toml
     code --install-extension serayuzgur.crates
-    # extension for syntax highlighting 
+    # extension for syntax highlighting
     code --install-extension dunstontc.vscode-rust-syntax
 fi
 # *********** install neovim plugins rust language **********
@@ -30,49 +44,47 @@ echo 'install vim/neovim plugins rust language'
 # Install latest nodejs
 if [ ! -x "$(command -v node)" ]; then
     echo 'install nodejs'
-    curl --fail -LSs https://install-node.now.sh/latest | sh
-    export PATH="/usr/local/bin/:$PATH"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    nvm install node
 fi
 # Install yarn
 if [ ! -x "$(command -v yarn)" ]; then
     echo 'install yarn'
-    curl --fail -o- -LSs https://yarnpkg.com/install.sh | sh
-    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+    npm install -g yarn
 fi
 # Use package feature to install coc.nvim
-echo 'install coc.nvim'
-git clone https://github.com/neoclide/coc.nvim.git --depth=1
+echo 'download and uncompress coc.nvim'
+curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz | tar xzfv -
+# For neovim directory
 DIR_NEOVIM=~/.local/share/nvim/site/pack/coc/start
-# For vim user, the directory is different
+# For vim directory
 DIR_VIM=~/.vim/pack/coc/start
 DIRS=($DIR_NEOVIM $DIR_VIM)
-for DIR in "${DIRS[@]}"
-do
+for DIR in "${DIRS[@]}"; do
     mkdir -p $DIR
-    cp -rf coc.nvim $DIR
+    cp -rf coc.nvim-release $DIR
 done
-rm -rf coc.nvim
-for DIR in "${DIRS[@]}"
-do
-    cd $DIR/coc.nvim && ./install.sh nightly
-done
+rm -rf coc.nvim-release
+# for DIR in "${DIRS[@]}"; do
+#     cd $DIR/coc.nvim-release && ./install.sh nightly
+# done
 # Install extensions
 echo 'install coc.nvim extensions'
 mkdir -p ~/.config/coc/extensions
 cd ~/.config/coc/extensions
-if [ ! -f package.json ];then
-    echo '{"dependencies":{}}'> package.json
+if [ ! -f package.json ]; then
+    echo '{"dependencies":{}}' >package.json
 fi
-# Rust language server extension 
-yarn add coc-rls
+# Rust language server extension
+yarn add coc-rls --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 # Json language server extension
-yarn add coc-json
+yarn add coc-json --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 # snippets solution for coc.nvim
-yarn add coc-snippets
+yarn add coc-snippets --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 # provide default highlight for coc.nvim
-yarn add coc-highlight
+yarn add coc-highlight --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 # YAML support for vim/neovim
-yarn add coc-yaml
+yarn add coc-yaml --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 
 # install rust.vim
 echo 'install rust.vim'
@@ -81,8 +93,7 @@ DIR_NEOVIM=~/.local/share/nvim/site/pack/rust.vim/start/
 # For vim user
 DIR_VIM=~/.vim/pack/rust.vim/start/
 DIRS=($DIR_NEOVIM $DIR_VIM)
-for DIR in "${DIRS[@]}"
-do
+for DIR in "${DIRS[@]}"; do
     mkdir -p $DIR
     cp -rf rust.vim $DIR
 done
@@ -95,8 +106,7 @@ DIR_NEOVIM=~/.local/share/nvim/site/pack/webapi-vim/start/
 # For vim user
 DIR_VIM=~/.vim/pack/webapi-vim/start/
 DIRS=($DIR_NEOVIM $DIR_VIM)
-for DIR in "${DIRS[@]}"
-do
+for DIR in "${DIRS[@]}"; do
     mkdir -p $DIR
     cp -rf webapi-vim $DIR
 done
@@ -138,28 +148,28 @@ cargo install racer
 fish_config="$HOME/.config/fish/config.fish"
 bash_config="$HOME/.bashrc"
 zsh_config="$HOME/.zshrc"
-if [ -f $bash_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $bash_config ; then
-    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> $bash_config
+if [ -f $bash_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $bash_config; then
+    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >>$bash_config
 fi
-if [ -f $zsh_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $zsh_config ; then
-    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >> $zsh_config
+if [ -f $zsh_config ] && ! grep -Fxq "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" $zsh_config; then
+    echo "export RUST_SRC_PATH=\$(rustc --print sysroot)/lib/rustlib/src/rust/src" >>$zsh_config
 fi
-if [ -f $fish_config ] && ! grep -Fxq "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" $fish_config ; then
-    echo "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" >> $fish_config
+if [ -f $fish_config ] && ! grep -Fxq "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" $fish_config; then
+    echo "set -x RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/src" >>$fish_config
 fi
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 # *********************** set alias uprust for update **********************
-if [ -f $bash_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $bash_config ; then
-    echo 'alias uprust="rustup update && cargo install-update -a"' >> $bash_config
+if [ -f $bash_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $bash_config; then
+    echo 'alias uprust="rustup update && cargo install-update -a"' >>$bash_config
 fi
 if [ -f $zsh_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $zsh_config; then
-    echo 'alias uprust="rustup update && cargo install-update -a"' >> $zsh_config
+    echo 'alias uprust="rustup update && cargo install-update -a"' >>$zsh_config
 fi
 if [ -f $fish_config ] && ! grep -Fxq 'alias uprust="rustup update && cargo install-update -a"' $fish_config; then
-    echo 'alias uprust="rustup update && cargo install-update -a"' >> $fish_config
+    echo 'alias uprust="rustup update && cargo install-update -a"' >>$fish_config
 fi
 # ******************* useful rust command line tools *********************
-if [ "$1" == "all" ];then
+if [ "$1" == "all" ]; then
     echo 'install useful rust command line tools'
     cargo install bat # or fcat
     cargo install lsd # or exa
@@ -178,10 +188,6 @@ if [ "$1" == "all" ];then
     cargo install ffsend
     cargo install sd
     cargo install peep
-    cargo install pf
-    cargo install note-rs
-    cargo install gitpub
-    cargo install cbs
 fi
 # ************************** finish install ******************************
 echo '
